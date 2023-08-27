@@ -56,6 +56,7 @@ class SpringBatchTest {
   @Test
   @Transactional
   void shouldDuplicateSalaryOfAllEmployees() throws Exception {
+    // <x> 批量读取 Employee 数组
     List<Employee> employees = new ArrayList<>();
     Employee employee = pagingNoNestedItemReader.read();
     while (employee != null) {
@@ -63,6 +64,8 @@ class SpringBatchTest {
       employees.add(employee);
       employee = pagingNoNestedItemReader.read();
     }
+    // <x> 批量写入
+    //noinspection Duplicates
     writer.write(employees);
 
     assertThat((Integer) session.selectOne("checkSalarySum")).isEqualTo(20000);
@@ -89,20 +92,26 @@ class SpringBatchTest {
   @Test
   @Transactional
   void checkCursorReadingWithoutNestedInResultMap() throws Exception {
+    // 打开 Cursor
     cursorNoNestedItemReader.doOpen();
     try {
+      // Employee 数组
       List<Employee> employees = new ArrayList<>();
+      // <x> 循环读取，写入到 Employee 数组中
       Employee employee = cursorNoNestedItemReader.read();
       while (employee != null) {
         employee.setSalary(employee.getSalary() * 2);
         employees.add(employee);
         employee = cursorNoNestedItemReader.read();
       }
+
+      // 批量写入
       writer.write(employees);
 
       assertThat((Integer) session.selectOne("checkSalarySum")).isEqualTo(20000);
       assertThat((Integer) session.selectOne("checkEmployeeCount")).isEqualTo(employees.size());
     } finally {
+      // 关闭 Cursor
       cursorNoNestedItemReader.doClose();
     }
   }

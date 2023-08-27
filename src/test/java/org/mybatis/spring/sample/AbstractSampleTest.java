@@ -22,7 +22,24 @@ import org.mybatis.spring.sample.domain.User;
 import org.mybatis.spring.sample.service.FooService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
-
+/**
+ * 示例单元测试基类
+ *
+ * 1. {@link SampleEnableTest}
+ *      基于 @MapperScan 注解，扫描指定包
+ *
+ * 2. {@link SampleMapperTest}
+ *      基于 {@link org.mybatis.spring.mapper.MapperFactoryBean} 类，直接声明指定的 Mapper 接口
+ *
+ * 3. {@link SampleNamespaceTest}
+ *      基于 <mybatis:scan /> 标签，扫描指定包
+ *
+ * 4. {@link SampleScannerTest}
+ *      基于 {@link org.mybatis.spring.mapper.MapperScannerConfigurer} 类，扫描指定包
+ *
+ * 5. {@link SampleBatchTest}
+ *      在 SampleMapperTest 的基础上，使用 BatchExecutor 执行器
+ */
 @DirtiesContext
 abstract class AbstractSampleTest {
 

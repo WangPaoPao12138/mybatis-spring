@@ -31,10 +31,26 @@ import org.springframework.core.convert.converter.Converter;
  */
 public class MyBatisBatchItemWriterBuilder<T> {
 
+  /**
+   * SqlSessionTemplate 对象
+   */
   private SqlSessionTemplate sqlSessionTemplate;
+  /**
+   * SqlSessionFactory 对象
+   */
   private SqlSessionFactory sqlSessionFactory;
+  /**
+   * 语句编号
+   */
   private String statementId;
+
+  /**
+   * 是否校验至少更新一行
+   */
   private Boolean assertUpdates;
+  /**
+   * 参数转换器
+   */
   private Converter<T, ?> itemToParameterConverter;
 
   /**
@@ -46,6 +62,7 @@ public class MyBatisBatchItemWriterBuilder<T> {
    * @see MyBatisBatchItemWriter#setSqlSessionTemplate(SqlSessionTemplate)
    */
   public MyBatisBatchItemWriterBuilder<T> sqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+    //赋值 sqlSessionTemplate 对象
     this.sqlSessionTemplate = sqlSessionTemplate;
     return this;
   }
@@ -59,6 +76,7 @@ public class MyBatisBatchItemWriterBuilder<T> {
    * @see MyBatisBatchItemWriter#setSqlSessionFactory(SqlSessionFactory)
    */
   public MyBatisBatchItemWriterBuilder<T> sqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+    //赋值 sqlSessionFactory 对象
     this.sqlSessionFactory = sqlSessionFactory;
     return this;
   }
@@ -72,6 +90,7 @@ public class MyBatisBatchItemWriterBuilder<T> {
    * @see MyBatisBatchItemWriter#setStatementId(String)
    */
   public MyBatisBatchItemWriterBuilder<T> statementId(String statementId) {
+    //赋值 statementId 语句编号
     this.statementId = statementId;
     return this;
   }
@@ -85,6 +104,7 @@ public class MyBatisBatchItemWriterBuilder<T> {
    * @see MyBatisBatchItemWriter#setAssertUpdates(boolean)
    */
   public MyBatisBatchItemWriterBuilder<T> assertUpdates(boolean assertUpdates) {
+    //赋值 是否校验至少更新一行
     this.assertUpdates = assertUpdates;
     return this;
   }
@@ -98,6 +118,7 @@ public class MyBatisBatchItemWriterBuilder<T> {
    * @see MyBatisBatchItemWriter#setItemToParameterConverter(Converter)
    */
   public MyBatisBatchItemWriterBuilder<T> itemToParameterConverter(Converter<T, ?> itemToParameterConverter) {
+    //赋值 参数转换器
     this.itemToParameterConverter = itemToParameterConverter;
     return this;
   }

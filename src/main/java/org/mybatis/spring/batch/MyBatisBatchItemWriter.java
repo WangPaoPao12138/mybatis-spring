@@ -55,12 +55,24 @@ public class MyBatisBatchItemWriter<T> implements ItemWriter<T>, InitializingBea
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MyBatisBatchItemWriter.class);
 
+  /**
+   * SqlSessionTemplate 对象
+   */
   private SqlSessionTemplate sqlSessionTemplate;
 
+  /**
+   * 语句编号
+   */
   private String statementId;
 
+  /**
+   * 是否校验至少更新一行
+   */
   private boolean assertUpdates = true;
 
+  /**
+   * 参数转换器
+   */
   private Converter<T, ?> itemToParameterConverter = new PassThroughConverter<>();
 
   /**
@@ -136,22 +148,25 @@ public class MyBatisBatchItemWriter<T> implements ItemWriter<T>, InitializingBea
    */
   @Override
   public void write(final List<? extends T> items) {
-
     if (!items.isEmpty()) {
       LOGGER.debug(() -> "Executing batch with " + items.size() + " items.");
 
+      // <1> 遍历 items 数组，提交到 sqlSessionTemplate 中
       for (T item : items) {
         sqlSessionTemplate.update(statementId, itemToParameterConverter.convert(item));
       }
 
+      // <2> 执行一次批量操作
       List<BatchResult> results = sqlSessionTemplate.flushStatements();
 
       if (assertUpdates) {
+        // 如果有多个返回结果，抛出 InvalidDataAccessResourceUsageException 异常
         if (results.size() != 1) {
           throw new InvalidDataAccessResourceUsageException("Batch execution returned invalid results. "
               + "Expected 1 but number of BatchResult objects returned was " + results.size());
         }
 
+        // <3> 遍历执行结果，若存在未更新的情况，则抛出 EmptyResultDataAccessException 异常
         int[] updateCounts = results.get(0).getUpdateCounts();
 
         for (int i = 0; i < updateCounts.length; i++) {
